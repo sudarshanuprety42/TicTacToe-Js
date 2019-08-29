@@ -1,0 +1,170 @@
+<script type="text/javascript">
+  var turn="O";
+  var game_over = false;
+
+  function restart(){
+    document.getElementById("00").innerHTML="";
+    document.getElementById("01").innerHTML="";
+    document.getElementById("02").innerHTML="";
+    document.getElementById("10").innerHTML="";
+    document.getElementById("11").innerHTML="";
+    document.getElementById("12").innerHTML="";
+    document.getElementById("20").innerHTML="";
+    document.getElementById("21").innerHTML="";
+    document.getElementById("22").innerHTML="";
+
+    turn="O"
+    game_over=false;
+    document.getElementById("turn_msg").style.display = "block";
+    document.getElementById("turn_msg").innerHTML="Player O turn";
+    document.getElementById("msg").style.display ="none";
+
+
+  }
+
+  function isGameDraw(){
+    return (document.getElementById("00").innerHTML!=""&&document.getElementById("01").innerHTML!=""&&document.getElementById("02").innerHTML!=""&&
+    document.getElementById("10").innerHTML!=""&&document.getElementById("11").innerHTML!=""&&document.getElementById("12").innerHTML!=""&&
+    document.getElementById("20").innerHTML!=""&&document.getElementById("21").innerHTML!=""&&document.getElementById("22").innerHTML!="");
+  }
+
+  function isGameOver(current){
+    row = current.substring(0,1);
+    column = current.substring(1,2);
+
+    var rows = getCurrentRows(row);
+    var columns = getCurrentColumns(column);
+
+
+
+    result1 = true;
+    for(x of rows){
+      if(x.innerHTML!=turn){
+        result1 = false;
+        break;
+      }
+    }
+
+    result2 = true;
+    for(y of columns){
+      if(y.innerHTML!=turn){
+        result2 = false;
+        break;
+      }
+    }
+
+    result3 = true;
+    if((document.getElementById("00").innerHTML!=turn||document.getElementById("11").innerHTML!=turn||document.getElementById("22").innerHTML!=turn)&&
+    (document.getElementById("02").innerHTML!=turn||document.getElementById("11").innerHTML!=turn||document.getElementById("20").innerHTML!=turn)){
+      result3=false;
+    }
+
+    if(result1||result2||result3){
+      return 1;
+    }
+    else if(isGameDraw()){
+      return 0;
+    }
+    return -1;
+  }
+
+  function getCurrentRows(row){
+    var elems = document.getElementsByTagName("*");
+    var rows = [];
+    for (var i=0, m=elems.length; i<m; i++) {
+      if (elems[i].id && elems[i].id[0] == row) {
+          rows.push(elems[i]);
+      }
+    }
+    return rows;
+  }
+
+  function getCurrentColumns(column){
+    var elems = document.getElementsByTagName("*");
+    var columns = [];
+    for (var i=0, m=elems.length; i<m; i++) {
+      if (elems[i].id && elems[i].id[1] == column) {
+          columns.push(elems[i]);
+      }
+    }
+    return columns;
+  }
+
+  function click_me(event){
+    if(document.getElementById(event.target.id).innerHTML.length==0&&!game_over){
+      document.getElementById(event.target.id).innerHTML=turn;
+      var result = isGameOver(event.target.id);
+      if(result==1){
+        game_over = true;
+        document.getElementById("msg").style.display ="block";
+        document.getElementById("msg").innerHTML="Game over player "+turn+" won";
+        document.getElementById("turn_msg").style.display = "none";
+        turn = "O";
+      }
+      else if (result==0) {
+        game_over = true;
+        document.getElementById("msg").style.display ="block";
+        document.getElementById("msg").innerHTML="Game over :: draw";
+        document.getElementById("turn_msg").style.display = "none";
+        turn = "O";
+      }
+      else{
+        if(turn=="O"){
+          turn="X";
+          document.getElementById("turn_msg").innerHTML="Player X turn";
+        }
+        else{
+          turn="O";
+          document.getElementById("turn_msg").innerHTML="Player O turn";
+
+        }
+      }
+
+
+    }
+
+  }
+</script>
+
+<table border="1" align="center" style="font-size:20px;">
+
+  <tr>
+    <td>
+      <div onclick="click_me(event);" id="00" style="width:40px;height:40px;"></div>
+  </td>
+    <td>
+      <div onclick="click_me(event);" id="01" style="width:40px;height:40px;"></div>
+    </td>
+    <td>
+      <div onclick="click_me(event);" id="02" style="width:40px;height:40px;"></div>
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>
+      <div onclick="click_me(event);" id="10" style="width:40px;height:40px;"></div>
+
+    </td>
+    <td>
+      <div onclick="click_me(event);" id="11" style="width:40px;height:40px;"></div>
+    </td>
+    <td>
+      <div onclick="click_me(event);" id="12" style="width:40px;height:40px;"></div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div onclick="click_me(event);" id="20" style="width:40px;height:40px;"></div>
+    </td>
+    <td>
+      <div onclick="click_me(event);" id="21" style="width:40px;height:40px;"></div>
+    </td>
+    <td>
+      <div onclick="click_me(event);" id="22" style="width:40px;height:40px;"></div>
+    </td>
+  </tr>
+</table>
+<h4 id="turn_msg" style="margin-left:710px;">Player O turn</h4>
+<h1 id="msg" style="margin-left:580px;"></h1>
+<button style="margin-left:710px;width:100px;height:30px;" type="button" name="button" onclick="restart();">Restart</button>
