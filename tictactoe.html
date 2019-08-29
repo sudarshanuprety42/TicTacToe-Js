@@ -1,17 +1,17 @@
 <script type="text/javascript">
+  var gridX=3;
+  var gridY=3;
   var turn="O";
   var game_over = false;
 
   function restart(){
-    document.getElementById("00").innerHTML="";
-    document.getElementById("01").innerHTML="";
-    document.getElementById("02").innerHTML="";
-    document.getElementById("10").innerHTML="";
-    document.getElementById("11").innerHTML="";
-    document.getElementById("12").innerHTML="";
-    document.getElementById("20").innerHTML="";
-    document.getElementById("21").innerHTML="";
-    document.getElementById("22").innerHTML="";
+    for(var i=0;i<gridX;i++){
+      for(var j=0;j<gridY;j++){
+        document.getElementById(""+i+j).innerHTML="";
+      }
+    }
+
+
 
     turn="O"
     game_over=false;
@@ -22,10 +22,40 @@
 
   }
 
+  function changeGrid(){
+    g = grid[grid.selectedIndex].text;
+    g_rows = g.substring(0,1);
+    g_columns = g.substring(2,3);
+    gridX=g_rows
+    gridY=g_columns
+
+    console.log(g_rows);
+    console.log(g_columns);
+    var s="";
+    for(var i=0;i<g_rows;i++){
+      s+="<tr>"
+      for(var j=0;j<g_columns;j++){
+        s+="<td><div onclick='click_me(event);' id='"+i+j+"' style='width:40px;height:40px;'></div></td>"
+      }
+      s+="</tr>"
+    }
+
+    document.getElementById("tbl").innerHTML = s;
+
+
+  }
+
   function isGameDraw(){
-    return (document.getElementById("00").innerHTML!=""&&document.getElementById("01").innerHTML!=""&&document.getElementById("02").innerHTML!=""&&
-    document.getElementById("10").innerHTML!=""&&document.getElementById("11").innerHTML!=""&&document.getElementById("12").innerHTML!=""&&
-    document.getElementById("20").innerHTML!=""&&document.getElementById("21").innerHTML!=""&&document.getElementById("22").innerHTML!="");
+    result = true;
+    for(var i=0;i<gridX;i++){
+      for(var j=0;j<gridY;j++){
+        if(document.getElementById(""+i+j).innerHTML==""){
+          result=false;
+          break;
+        }
+      }
+    }
+    return result;
   }
 
   function isGameOver(current){
@@ -53,11 +83,31 @@
       }
     }
 
-    result3 = true;
-    if((document.getElementById("00").innerHTML!=turn||document.getElementById("11").innerHTML!=turn||document.getElementById("22").innerHTML!=turn)&&
-    (document.getElementById("02").innerHTML!=turn||document.getElementById("11").innerHTML!=turn||document.getElementById("20").innerHTML!=turn)){
-      result3=false;
+    result31 = true;
+    result32 = true;
+
+    for(var i=0;i<gridX;i++){
+      for(var j=0;j<gridY;j++){
+        if(i+j==(gridX-1)){
+          if(document.getElementById(""+i+j).innerHTML!=turn){
+            result31=false;
+            break;
+          }
+        }
+      }
     }
+    for(var i=0;i<gridX;i++){
+      for(var j=0;j<gridY;j++){
+        if(i==j){
+          if(document.getElementById(""+i+j).innerHTML!=turn){
+            result32=false;
+            break;
+          }
+        }
+      }
+    }
+
+    result3=result31||result32;
 
     if(result1||result2||result3){
       return 1;
@@ -131,8 +181,13 @@
 
   }
 </script>
-
-<table border="1" align="center" style="font-size:20px;">
+  <select class="" name="grid" id="grid">
+    <option value="">3x3</option>
+    <option value="">4x4</option>
+    <option value="">5x5</option>
+  </select>
+  <button type="button" name="button" onclick="changeGrid()">Change grid</button>
+<table border="1" align="center" style="font-size:20px;" id="tbl">
 
   <tr>
     <td>
