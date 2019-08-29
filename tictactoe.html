@@ -92,6 +92,12 @@
 
   function click_me(event){
     if(document.getElementById(event.target.id).innerHTML.length==0&&!game_over){
+      if(turn=="O"){
+        document.getElementById(event.target.id).style.color="blue";
+      }
+      else{
+        document.getElementById(event.target.id).style.color="red";
+      }
       document.getElementById(event.target.id).innerHTML=turn;
       var result = isGameOver(event.target.id);
       if(result==1){
