@@ -11,19 +11,16 @@
       }
     }
 
-
-
     turn="O"
     game_over=false;
     document.getElementById("turn_msg").style.display = "block";
     document.getElementById("turn_msg").innerHTML="Player O turn";
     document.getElementById("msg").style.display ="none";
-
-
   }
 
   function changeGrid(){
-    restart();
+    turn="O";
+    document.getElementById("turn_msg").innerHTML="Player O turn";
     g = grid[grid.selectedIndex].text;
     g_rows = g.substring(0,1);
     g_columns = g.substring(2,3);
@@ -42,8 +39,6 @@
     }
 
     document.getElementById("tbl").innerHTML = s;
-
-
   }
 
   function isGameDraw(){
@@ -65,9 +60,6 @@
 
     var rows = getCurrentRows(row);
     var columns = getCurrentColumns(column);
-
-
-
     result1 = true;
     for(x of rows){
       if(x.innerHTML!=turn){
@@ -97,6 +89,7 @@
         }
       }
     }
+
     for(var i=0;i<gridX;i++){
       for(var j=0;j<gridY;j++){
         if(i==j){
@@ -143,14 +136,16 @@
 
   function click_me(event){
     if(document.getElementById(event.target.id).innerHTML.length==0&&!game_over){
+      cell=document.getElementById(event.target.id);
       if(turn=="O"){
-        document.getElementById(event.target.id).style.color="blue";
+      cell.style.color="blue";
       }
       else{
-        document.getElementById(event.target.id).style.color="red";
+        cell.style.color="red";
       }
-      document.getElementById(event.target.id).innerHTML=turn;
+      cell.innerHTML=turn;
       var result = isGameOver(event.target.id);
+      
       if(result==1){
         game_over = true;
         document.getElementById("msg").style.display ="block";
@@ -176,10 +171,7 @@
 
         }
       }
-
-
     }
-
   }
 </script>
   <select class="" name="grid" id="grid">
@@ -189,44 +181,12 @@
   </select>
   <button type="button" name="button" onclick="changeGrid()">Change grid</button>
 <table border="1" align="center" style="font-size:20px;" id="tbl">
-
-  <tr>
-    <td>
-      <div onclick="click_me(event);" id="00" style="width:40px;height:40px;"></div>
-  </td>
-    <td>
-      <div onclick="click_me(event);" id="01" style="width:40px;height:40px;"></div>
-    </td>
-    <td>
-      <div onclick="click_me(event);" id="02" style="width:40px;height:40px;"></div>
-    </td>
-  </tr>
-
-
-  <tr>
-    <td>
-      <div onclick="click_me(event);" id="10" style="width:40px;height:40px;"></div>
-
-    </td>
-    <td>
-      <div onclick="click_me(event);" id="11" style="width:40px;height:40px;"></div>
-    </td>
-    <td>
-      <div onclick="click_me(event);" id="12" style="width:40px;height:40px;"></div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div onclick="click_me(event);" id="20" style="width:40px;height:40px;"></div>
-    </td>
-    <td>
-      <div onclick="click_me(event);" id="21" style="width:40px;height:40px;"></div>
-    </td>
-    <td>
-      <div onclick="click_me(event);" id="22" style="width:40px;height:40px;"></div>
-    </td>
-  </tr>
+<!-- All game content goes here -->
 </table>
 <h4 id="turn_msg" style="margin-left:710px;">Player O turn</h4>
 <h1 id="msg" style="margin-left:580px;"></h1>
 <button style="margin-left:710px;width:100px;height:30px;" type="button" name="button" onclick="restart();">Restart</button>
+
+<script type="text/javascript">
+  changeGrid();
+</script>
